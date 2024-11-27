@@ -53,6 +53,7 @@ function reducer(state, action) {
       };
     case "payLoan":
       if (state.balance < state.loan) return { ...state };
+      if (state.loan === 0) return { ...state };
       return {
         ...state,
         loan: state.loan - action.payload,
