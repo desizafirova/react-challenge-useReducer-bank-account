@@ -32,6 +32,33 @@ function reducer(state, action) {
         ...state,
         isActive: true,
       }
+    case 'deposit': 
+      return {
+        ...state,
+        balance: state.balance + action.payload,
+      }
+    case 'withdraw':
+      if(state.balance <= action.payload) return {...state}
+      return {
+        ...state,
+        balance: state.balance - action.payload
+      }
+    case 'requestLoan':
+      if(state.loan > 0) return {...state}
+      return {
+        ...state,
+        loan: state.loan + action.payload,
+      }
+    case 'payLoan':
+      if(state.balance < state.loan) return {...state}
+      return {
+        ...state,
+        loan: state.loan - action.payload,
+        balance: state.balance - action.payload,
+      }
+    case 'closeAccount':
+      if(state.balance > 0 || state.loan > 0) return {...state}
+      return initialState,
   }
 }
 
@@ -44,32 +71,32 @@ export default function App() {
       <p>Loan: X</p>
 
       <p>
-        <button onClick={() => {}} disabled={isActive}>
+        <button onClick={() => dispatch({type: 'openAccount'})} disabled={!isActive}>
           Open account
         </button>
       </p>
       <p>
-        <button onClick={() => {}} disabled={isActive}>
+        <button onClick={() => dispatch({type: 'deposit', payload: 150})} disabled={!isActive}>
           Deposit 150
         </button>
       </p>
       <p>
-        <button onClick={() => {}} disabled={isActive}>
+        <button onClick={() => dispatch({type: 'withdraw', payload: 50})} disabled={!isActive}>
           Withdraw 50
         </button>
       </p>
       <p>
-        <button onClick={() => {}} disabled={isActive}>
+        <button onClick={() => dispatch({type: 'requestLoan', payload: 5000})} disabled={!isActive}>
           Request a loan of 5000
         </button>
       </p>
       <p>
-        <button onClick={() => {}} disabled={false}>
+        <button onClick={() => dispatch({type: 'payLoan', payload: 5000})} disabled={!isActive}>
           Pay loan
         </button>
       </p>
       <p>
-        <button onClick={() => {}} disabled={false}>
+        <button onClick={() => dispatch({type: 'closeAccount'})} disabled={!isActive}>
           Close account
         </button>
       </p>
